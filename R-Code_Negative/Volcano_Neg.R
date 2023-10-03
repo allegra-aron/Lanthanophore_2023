@@ -130,7 +130,7 @@ plot <- volcanoPlot(DEres.df, fold_cutoff=0.5, pvalue_cutoff=0.01)
 ggplotly(plot)
 
 install.packages('svglite')
-ggsave(file="test.svg", plot=plot, width=10, height=8)
+ggsave(file="~/Dropbox/2023-Lanthanide_Nature/R-Code_Negative/Volcano_Inputs/volcano_neg_output.svg", plot=plot, width=10, height=8)
 
 write.csv(DEres.df, "~/Desktop/volcano_t-test.csv", row.names=FALSE)
 
@@ -150,7 +150,12 @@ my_comparisons <- list( c("A7", "KO"), c("KO", "WT"), c("A7", "WT"), c("WT", "WT
 fig <- p + stat_compare_means(comparisons = my_comparisons, method = "wilcox.test") +
   stat_compare_means(label.y = .0012)
 fig
-ggsave(file="wilcox_boxplot.svg", plot=fig, width=10, height=8)
+
+BH_corr <- pairwise.wilcox.test(my_data2$norm_peak_area, my_data2$group, p.adjust.method = "BH", paired = FALSE)
+m1m2sup <- BH_corr[["p.value"]]
+p_m1m2sup <- c(m1m2sup[1,1], m1m2sup[2,1], m1m2sup[2,2])
+
+ggsave(file="~/Dropbox/2023-Lanthanide_Nature/R-Code_Negative/Volcano_Inputs/wilcox_boxplot.svg", plot=fig, width=10, height=8)
 
 ############################################################################
 #####box plot with anova and stats for feature m/z 797####
