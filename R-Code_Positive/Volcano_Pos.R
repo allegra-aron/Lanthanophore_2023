@@ -150,14 +150,18 @@ my_comparisons <- list( c("A7", "KO"), c("KO", "WT"), c("A7", "WT"), c("WT", "WT
 fig <- p + stat_compare_means(comparisons = my_comparisons, method = "wilcox.test") +
   stat_compare_means(label.y = .0012)
 fig
-ggsave(file="wilcox_boxplot.svg", plot=fig, width=10, height=8)
+BH_corr <- pairwise.wilcox.test(my_data2$norm_peak_area, my_data2$group, p.adjust.method = "BH", paired = FALSE)
+m1m2sup <- BH_corr[["p.value"]]
+p_m1m2sup <- c(m1m2sup[1,1], m1m2sup[2,1], m1m2sup[2,2])
+
+ggsave(file="~/Dropbox/2023-Lanthanide_Nature/R-Code_Positive/Volcano_Inputs/wilcox_boxplot.svg", plot=fig, width=10, height=8)
 
 ############################################################################
 #####box plot with anova and stats for feature m/z 797####
 
 library("ggpubr")
 library("data.table")
-my_data2 <- read.csv("~/Dropbox/2023-Lanthanide_Nature/R-Code_Negative/Volcano_Inputs/Normalized_Imp_Quant_797.csv")
+my_data2 <- read.csv("~/Dropbox/2023-Lanthanide_Nature/R-Code_Positive/Volcano_Inputs/Normalized_Imp_Quant_799.csv")
 ##note: this was created from copying feature ID 10001_797.404_8.868 into the new table above##
 p <- ggboxplot(my_data2,x="group", y="norm_peak_area", color="group", add = "jitter", shape = "group", yscale="log10")
 p
@@ -166,4 +170,4 @@ my_comparisons <- list( c("A7", "KO"), c("KO", "WT"), c("A7", "WT"), c("WT", "WT
 fig <- p + stat_compare_means(comparisons = my_comparisons, method = "t.test") + stat_compare_means(method = "anova", label.y = .0012)
 fig
 
-ggsave(file="anova_boxplot.svg", plot=fig, width=10, height=8)
+ggsave(file="~/Dropbox/2023-Lanthanide_Nature/R-Code_Positive/Volcano_Inputs/anova_boxplot.svg", plot=fig, width=10, height=8)
